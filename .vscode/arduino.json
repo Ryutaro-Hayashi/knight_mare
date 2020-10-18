@@ -1,5 +1,6 @@
 {
     "programmer": "AVRISP mkII",
     "board": "arduino:avr:leonardo",
-    "sketch": "knight_mare.ino"
+    "sketch": "knight_mare.ino",
+    "port":"COM4"
 }
