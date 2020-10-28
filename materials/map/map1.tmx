@@ -3,15 +3,22 @@
  <tileset firstgid="1" source="石柱_右.tsx"/>
  <tileset firstgid="5" source="石柱_左.tsx"/>
  <tileset firstgid="9" source="地面.tsx"/>
+ <tileset firstgid="13" source="川_岸.tsx"/>
+ <tileset firstgid="17" source="石柱_右ue.tsx"/>
+ <tileset firstgid="21" source="石柱_左上.tsx"/>
+ <tileset firstgid="25" source="poporon02.tsx"/>
+ <tileset firstgid="26" source="石柱_左下.tsx"/>
+ <tileset firstgid="30" source="石柱_右下.tsx"/>
+ <tileset firstgid="34" source="橋.tsx"/>
  <layer id="1" name="タイル・レイヤー 1" width="16" height="8">
   <data encoding="csv">
 5,6,9,10,9,10,9,10,9,10,9,10,9,10,1,2,
 7,8,11,12,11,12,11,12,11,12,11,12,11,12,3,4,
 5,6,9,10,9,10,9,10,9,10,9,10,9,10,1,2,
+7,8,9,10,11,12,11,12,11,12,11,12,9,10,3,4,
+5,6,11,12,9,10,9,10,9,10,9,10,11,12,1,2,
 7,8,11,12,11,12,11,12,11,12,11,12,11,12,3,4,
-5,6,9,10,9,10,9,10,9,10,9,10,9,10,1,2,
-7,8,11,12,11,12,11,12,11,12,11,12,11,12,3,4,
-5,6,9,10,9,10,9,10,9,10,9,10,9,10,1,2,
+5,6,9,10,9,10,9,25,9,10,9,10,9,10,1,2,
 7,8,11,12,11,12,11,12,11,12,11,12,11,12,3,4
 </data>
  </layer>
