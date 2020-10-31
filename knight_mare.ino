@@ -14,8 +14,8 @@ ArduboyTones sound(arduboy.audio.enabled);
 #include "data.h"
 
 #define SCRN_FPS 30
-#define TLE_X 30     //--タイトル画面文字列のX
-#define TLE_Y 12     //--タイトル画面文字列の1列目Y
+#define TLE_X 30 //--タイトル画面文字列のX
+#define TLE_Y 12 //--タイトル画面文字列の1列目Y
 
 enum GameState
 {                 //--画面モードを表す列挙定数
@@ -28,6 +28,13 @@ enum GameState
   GAME_TEST
 };
 
+enum SoundState
+{ //--サウンド再生モードを示す列挙体
+  SOUND_OFF = 0,
+  SOUND_ON
+};
+
+SoundState g_soundstate = SOUND_ON;
 GameState g_gamestate = GAME_TITLE;
 float g_hx = 0, g_hy = 0; //--座標
 
@@ -86,14 +93,38 @@ void loop()
 }
 
 //タイトル画面描画
-void DrawGameTitle(){
-  
-    arduboy.drawBitmap(TLE_X, TLE_Y, op_title, 65, 23, 1);
-    arduboy.setCursor(TLE_X, TLE_Y+27);
-    arduboy.println("A,B:GAME START");
-    arduboy.setCursor(TLE_X, TLE_Y+37);
-    arduboy.println("<,>:SOUND ON");
-  
+void DrawGameTitle()
+{
+
+  arduboy.drawBitmap(TLE_X, TLE_Y, op_title, 65, 23, 1);
+  arduboy.setCursor(TLE_X, TLE_Y + 27);
+  arduboy.println("A:GAME START");
+
+  arduboy.setCursor(TLE_X, TLE_Y + 37);
+  if (arduboy.pressed(B_BUTTON))
+  {
+    if (g_soundstate == SOUND_OFF)
+    {
+      g_soundstate = SOUND_ON;
+    }
+    else
+    {
+      g_soundstate = SOUND_ON;
+    }
+  }
+
+  arduboy.setCursor(TLE_X, TLE_Y + 37);
+  arduboy.print("B:SOUND ");
+
+  if (g_soundstate == SOUND_ON)
+  {
+    arduboy.print("ON");
+  }
+  else
+  {
+    arduboy.print("OFF");
+  }
+
   /*  if ((arduboy.pressed(A_BUTTON) == true))
     {
         setGameState(GAME_START);
@@ -106,33 +137,34 @@ void DrawGameTitle(){
 }
 
 //ゲーム本編描画
-void DrawGameMain(){
-    float mv = 80.0f * g_frametime; //移動量計算
-    if (arduboy.pressed(DOWN_BUTTON))
-      g_hy += mv;
-    if (arduboy.pressed(UP_BUTTON))
-      g_hy -= mv;
-    if (arduboy.pressed(RIGHT_BUTTON))
-      g_hx += mv;
-    if (arduboy.pressed(LEFT_BUTTON))
-      g_hx -= mv;
+void DrawGameMain()
+{
+  float mv = 80.0f * g_frametime; //移動量計算
+  if (arduboy.pressed(DOWN_BUTTON))
+    g_hy += mv;
+  if (arduboy.pressed(UP_BUTTON))
+    g_hy -= mv;
+  if (arduboy.pressed(RIGHT_BUTTON))
+    g_hx += mv;
+  if (arduboy.pressed(LEFT_BUTTON))
+    g_hx -= mv;
 
-    arduboy.clear();
-    arduboy.setCursor(54, 0);
-    sprites.drawSelfMasked(g_hx, g_hy, SPRITE8x8, 0);
-    arduboy.print(g_lasttime);
-    arduboy.print(" : ");
-    arduboy.print(g_frametime);
-    arduboy.print(" : ");
-    arduboy.print(mv);
+  arduboy.clear();
+  arduboy.setCursor(54, 0);
+  sprites.drawSelfMasked(g_hx, g_hy, SPRITE8x8, 0);
+  arduboy.print(g_lasttime);
+  arduboy.print(" : ");
+  arduboy.print(g_frametime);
+  arduboy.print(" : ");
+  arduboy.print(mv);
 }
 
 //ゲームクリア画面描画
-void DrawGameClear(){
-
+void DrawGameClear()
+{
 }
 
 //ゲームオーバー画面描画
-void DrawGameOver(){
-
+void DrawGameOver()
+{
 }
