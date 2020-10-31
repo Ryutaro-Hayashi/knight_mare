@@ -11,12 +11,13 @@ Sprites sprites;
 ArduboyTones sound(arduboy.audio.enabled);
 #endif
 
-
 #include "data.h"
 
 #define SCRN_FPS 30
+#define TLE_X 30     //--タイトル画面文字列のX
+#define TLE_Y 12     //--タイトル画面文字列の1列目Y
 
-enum GAMESTATE
+enum GameState
 {                 //--画面モードを表す列挙定数
   GAME_TITLE = 1, //タイトル、メイン、ステージ開始、中断、ゲームオーバー、ゲームクリア
   GAME_MAIN,
@@ -26,6 +27,15 @@ enum GAMESTATE
   GAME_CLEAR,
   GAME_TEST
 };
+
+GameState g_gamestate = GAME_TITLE;
+float g_hx = 0, g_hy = 0; //--座標
+
+//関数プロとタイイプ宣言
+void DrawGameTitle();
+void DrawGameMain();
+void DrawGameClear();
+void DrawGameOver();
 
 long g_lasttime = 0;
 float g_frametime = 0;
@@ -42,7 +52,7 @@ void loop()
   if (!(arduboy.nextFrame()))
     return;
   arduboy.clear();
-  float X = 0, Y = 0;
+
   g_lasttime = millis();
 
   while ((arduboy.pressed(A_BUTTON) == false) || (arduboy.pressed(B_BUTTON) == false))
@@ -54,27 +64,75 @@ void loop()
     g_frametime = (float)(curtime - g_lasttime) / 1000.0f;
     g_lasttime = curtime;
 
-    float mv = 80.0f * g_frametime; //移動量計算
-    if (arduboy.pressed(DOWN_BUTTON))
-      Y += mv;
-    if (arduboy.pressed(UP_BUTTON))
-      Y -= mv;
-    if (arduboy.pressed(RIGHT_BUTTON))
-      X += mv;
-    if (arduboy.pressed(LEFT_BUTTON))
-      X -= mv;
-
-    arduboy.clear();
-    arduboy.setCursor(54,0);
-    sprites.drawSelfMasked(X, Y, SPRITE8x8, 0);
-    arduboy.print(g_lasttime);
-    arduboy.print(" : ");
-    arduboy.print(g_frametime);
-    arduboy.print(" : ");
-    arduboy.print(mv);
+    switch (g_gamestate)
+    {
+    case GAME_TITLE:
+      DrawGameTitle();
+      break;
+    case GAME_MAIN:
+      DrawGameMain();
+    case GAME_CLEAR:
+      DrawGameClear();
+      break;
+    case GAME_OVER:
+      DrawGameOver();
+      break;
+    }
 
     arduboy.display(); //--画面消去
   }
 
   // put your main code here, to run repeatedly:
+}
+
+//タイトル画面描画
+void DrawGameTitle(){
+  
+    arduboy.drawBitmap(TLE_X, TLE_Y, op_title, 65, 23, 1);
+    arduboy.setCursor(TLE_X, TLE_Y+27);
+    arduboy.println("A,B:GAME START");
+    arduboy.setCursor(TLE_X, TLE_Y+37);
+    arduboy.println("<,>:SOUND ON");
+  
+  /*  if ((arduboy.pressed(A_BUTTON) == true))
+    {
+        setGameState(GAME_START);
+    };
+    if ((arduboy.pressed(B_BUTTON)))
+    {
+        setGameState(GAME_TEST);
+    }
+*/
+}
+
+//ゲーム本編描画
+void DrawGameMain(){
+    float mv = 80.0f * g_frametime; //移動量計算
+    if (arduboy.pressed(DOWN_BUTTON))
+      g_hy += mv;
+    if (arduboy.pressed(UP_BUTTON))
+      g_hy -= mv;
+    if (arduboy.pressed(RIGHT_BUTTON))
+      g_hx += mv;
+    if (arduboy.pressed(LEFT_BUTTON))
+      g_hx -= mv;
+
+    arduboy.clear();
+    arduboy.setCursor(54, 0);
+    sprites.drawSelfMasked(g_hx, g_hy, SPRITE8x8, 0);
+    arduboy.print(g_lasttime);
+    arduboy.print(" : ");
+    arduboy.print(g_frametime);
+    arduboy.print(" : ");
+    arduboy.print(mv);
+}
+
+//ゲームクリア画面描画
+void DrawGameClear(){
+
+}
+
+//ゲームオーバー画面描画
+void DrawGameOver(){
+
 }
