@@ -1,5 +1,5 @@
-// Playtune bytestream for file "boss.mid" created by MIDITONES V2.00 on Fri Sep  4 20:06:05 2020
-// command line: C:\Users\hayashi\Documents\Arduino\knight_mare\_sozai\music\miditones.exe boss 
+// Playtune bytestream for file "boss.mid" created by MIDITONES V2.1 on Sun Nov  1 23:05:06 2020
+// command line: miditones boss 
 const unsigned char PROGMEM score [] = {
 // 
 0x90,48, 0x91,67, 0,20, 0x81, 0,21, 0x91,67, 0,21, 0x81, 0,21, 0x91,67, 0,21, 0x81, 0,20, 0x91,67, 0,21, 

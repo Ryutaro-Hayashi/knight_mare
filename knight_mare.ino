@@ -5,10 +5,24 @@ Arduboy2 arduboy;
 Sprites sprites;
 #endif
 
+#ifndef _ARDUBOYPLAYTUNE_H
+#define _ARDUBOYPLAYTUNE_H
+#include <ArduboyPlaytune.h>
+ArduboyPlaytune tunes(arduboy.audio.enabled);
+#endif
+
+/*
 #ifndef _ARDUBOYTONES_H
 #define _ARDUBOYTONES_H
 #include <ArduboyTones.h>
 ArduboyTones sound(arduboy.audio.enabled);
+#endif
+*/
+
+#ifndef _TINYFONT_H
+#define _TINYFONT_H
+#include "Tinyfont.h"
+Tinyfont tinyfont = Tinyfont(arduboy.sBuffer, Arduboy2::width(), Arduboy2::height());
 #endif
 
 #include "data.h"
@@ -58,14 +72,16 @@ void loop()
 {
   if (!(arduboy.nextFrame()))
     return;
+ 
   arduboy.clear();
 
-  g_lasttime = millis();
+ g_lasttime = millis();
 
   while ((arduboy.pressed(A_BUTTON) == false) || (arduboy.pressed(B_BUTTON) == false))
   {
     if (!(arduboy.nextFrame()))
       continue;
+  arduboy.clear();
 
     long curtime = millis(); //現在の時刻を記録
     g_frametime = (float)(curtime - g_lasttime) / 1000.0f;
@@ -97,32 +113,35 @@ void DrawGameTitle()
 {
 
   arduboy.drawBitmap(TLE_X, TLE_Y, op_title, 65, 23, 1);
-  arduboy.setCursor(TLE_X, TLE_Y + 27);
-  arduboy.println("A:GAME START");
 
-  arduboy.setCursor(TLE_X, TLE_Y + 37);
+  tinyfont.setCursor(TLE_X, TLE_Y + 31);
+  tinyfont.print("A:GAME START");
+
   if (arduboy.pressed(B_BUTTON))
   {
-    if (g_soundstate == SOUND_OFF)
-    {
-      g_soundstate = SOUND_ON;
+  switch(g_soundstate){
+    case SOUND_OFF:
+    g_soundstate = SOUND_ON;
+      break;
+    case SOUND_ON:
+    g_soundstate = SOUND_OFF;
+    //arduboy.audio.off;
+    break;
     }
-    else
-    {
-      g_soundstate = SOUND_ON;
-    }
+  delay(200);
   }
-
-  arduboy.setCursor(TLE_X, TLE_Y + 37);
-  arduboy.print("B:SOUND ");
+  
+  tinyfont.setCursor(TLE_X, TLE_Y + 37);
+  tinyfont.print("B:SOUND ");
 
   if (g_soundstate == SOUND_ON)
   {
-    arduboy.print("ON");
+    tinyfont.print("ON");
+    
   }
   else
   {
-    arduboy.print("OFF");
+    tinyfont.print("OFF");
   }
 
   /*  if ((arduboy.pressed(A_BUTTON) == true))
@@ -157,6 +176,9 @@ void DrawGameMain()
   arduboy.print(g_frametime);
   arduboy.print(" : ");
   arduboy.print(mv);
+
+
+
 }
 
 //ゲームクリア画面描画
