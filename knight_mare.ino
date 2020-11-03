@@ -27,13 +27,14 @@ Tinyfont tinyfont = Tinyfont(arduboy.sBuffer, Arduboy2::width(), Arduboy2::heigh
 
 #include "data.h"
 
-#define SCRN_FPS 30
+#define SCRN_FPS 60
 #define TLE_X 30 //--タイトル画面文字列のX
-#define TLE_Y 12 //--タイトル画面文字列の1列目Y
+#define TLE_Y 15 //--タイトル画面文字列の1列目Y
 
 enum GameState
 {                 //--画面モードを表す列挙定数
   GAME_TITLE = 1, //タイトル、メイン、ステージ開始、中断、ゲームオーバー、ゲームクリア
+  GAME_STAGECALL,
   GAME_MAIN,
   GAME_START,
   GAME_PAUSE,
@@ -41,6 +42,8 @@ enum GameState
   GAME_CLEAR,
   GAME_TEST
 };
+
+int Stage_Num = 1;
 
 enum SoundState
 { //--サウンド再生モードを示す列挙体
@@ -54,6 +57,7 @@ float g_hx = 0, g_hy = 0; //--座標
 
 //関数プロとタイイプ宣言
 void DrawGameTitle();
+void DrawGameStageCall();
 void DrawGameMain();
 void DrawGameClear();
 void DrawGameOver();
@@ -69,15 +73,13 @@ void setup()
 
   tunes.initChannel(PIN_SPEAKER_1);
   tunes.initChannel(PIN_SPEAKER_2);
-
+  arduboy.audio.on();
 }
 
 void loop()
 {
   if (!(arduboy.nextFrame()))
     return;
-
-  arduboy.clear();
 
   g_lasttime = millis();
 
@@ -95,6 +97,9 @@ void loop()
     {
     case GAME_TITLE:
       DrawGameTitle();
+      break;
+    case GAME_STAGECALL:
+      DrawGameStageCall();
       break;
     case GAME_MAIN:
       DrawGameMain();
@@ -116,13 +121,9 @@ void loop()
 void DrawGameTitle()
 {
 
-if(!tunes.playing()){
-tunes.playScore(OP_BGM);
-}
+  arduboy.drawBitmap(TLE_X, TLE_Y, op_title, 65, 18, 1);
 
-  arduboy.drawBitmap(TLE_X, TLE_Y, op_title, 65, 23, 1);
-
-  tinyfont.setCursor(TLE_X, TLE_Y + 31);
+  tinyfont.setCursor(TLE_X, TLE_Y + 24);
   tinyfont.print("A:GAME START");
 
   if (arduboy.pressed(B_BUTTON))
@@ -131,16 +132,18 @@ tunes.playScore(OP_BGM);
     {
     case SOUND_OFF:
       g_soundstate = SOUND_ON;
+      arduboy.audio.on();
       break;
     case SOUND_ON:
       g_soundstate = SOUND_OFF;
+      arduboy.audio.off();
       //arduboy.audio.off;
       break;
     }
     delay(200);
   }
 
-  tinyfont.setCursor(TLE_X, TLE_Y + 37);
+  tinyfont.setCursor(TLE_X, TLE_Y + 30);
   tinyfont.print("B:SOUND ");
 
   if (g_soundstate == SOUND_ON)
@@ -152,15 +155,42 @@ tunes.playScore(OP_BGM);
     tinyfont.print("OFF");
   }
 
-  /*  if ((arduboy.pressed(A_BUTTON) == true))
+  if (arduboy.pressed(A_BUTTON)) //Aボタンを押す
+  {
+    if (!tunes.playing())
+      tunes.playScore(OP_BGM);
+    g_gamestate = GAME_STAGECALL;
+
+    for (int i = 0; i < 3; i++)
     {
-        setGameState(GAME_START);
-    };
-    if ((arduboy.pressed(B_BUTTON)))
-    {
-        setGameState(GAME_TEST);
+
+      arduboy.clear();
+      arduboy.drawBitmap(TLE_X, TLE_Y, op_title, 65, 18, 1);
+      tinyfont.setCursor(TLE_X, TLE_Y + 24);
+      tinyfont.print("               ");
+      arduboy.display();
+      delay(330);
+      arduboy.clear();
+      arduboy.drawBitmap(TLE_X, TLE_Y, op_title, 65, 18, 1);
+      tinyfont.setCursor(TLE_X, TLE_Y + 24);
+      tinyfont.print("A:GAME START");
+      arduboy.display();
+      delay(330);
     }
-*/
+  }
+
+  // play the tune if we aren't already
+}
+
+//ステージ開始前の[STAGE X]表示
+void DrawGameStageCall(){
+arduboy.clear();
+tinyfont.setCursor(45,35);
+tinyfont.print("STAGE ");
+tinyfont.print(Stage_Num);
+arduboy.display();
+delay(4000);
+g_gamestate=GAME_MAIN;
 }
 
 //ゲーム本編描画
