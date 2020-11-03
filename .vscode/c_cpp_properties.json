@@ -12,39 +12,14 @@
                 "C:\\Program Files (x86)\\Arduino\\hardware\\tools\\**",
                 "C:\\Program Files (x86)\\Arduino\\libraries\\**",
                 "C:\\Users\\hayashi\\Documents\\Arduino\\hardware\\tools\\**",
-                "C:\\Users\\hayashi\\Documents\\Arduino\\libraries\\**",
-                "/usr/share/arduino-1.8.13/hardware/arduino/avr/**",
-                "/usr/share/arduino-1.8.13/tools/**"
+                "C:\\Users\\hayashi\\Documents\\Arduino\\libraries\\**"
             ],
             "forcedInclude": [
                 "C:\\Program Files (x86)\\Arduino\\hardware\\arduino\\avr\\cores\\arduino\\Arduino.h",
-                "/usr/share/arduino-1.8.13/hardware/arduino/avr/cores/arduino/Arduino.h"
             ],
             "intelliSenseMode": "clang-x64",
             "cStandard": "c11",
             "cppStandard": "c++17"
-        },
-        {
-            "name": "ubuntu",
-            "defines": [
-                "ARDUINO=10800"
-            ],
-            "includePath": [
-                "${workspaceRoot}",
-                "/usr/share/arduino-1.8.13/hardware/arduino/avr/**",
-                "/usr/share/arduino-1.8.13/tools/**",
-                "/usr/share/arduino-1.8.13/hardware/tools/**",
-                "/usr/share/arduino-1.8.13/libraries/**",
-                "/home/hayashi/Arduino/hardware/tools/**",
-                "/home/hayashi/Arduino/libraries/**"
-            ],
-            "forcedInclude": [
-                "/usr/share/arduino-1.8.13/hardware/arduino/avr/cores/arduino/Arduino.h"
-            ],
-            "intelliSenseMode": "clang-x64",
-            "cStandard": "c11",
-            "cppStandard": "c++17",
-            "compilerPath": "/usr/bin/cpp"
         }
     ],
     "version": 4
