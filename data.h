@@ -5,20 +5,6 @@ Arduboy2 arduboy;
 Sprites sprites;
 #endif
 
-#ifndef _ARDUBOYPLAYTUNE_H
-#define _ARDUBOYPLAYTUNE_H
-#include <ArduboyPlaytune.h>
-ArduboyPlaytune tunes(arduboy.audio.enabled);
-#endif
-
-/*
-#ifndef _ARDUBOYTONES_H
-#define _ARDUBOYTONES_H
-#include <ArduboyTones.h>
-ArduboyTones sound(arduboy.audio.enabled);
-#endif
-*/
-
 
 //###オープニング画面
 unsigned char const op_title[] PROGMEM =

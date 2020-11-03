@@ -66,22 +66,26 @@ void setup()
   arduboy.setFrameRate(SCRN_FPS);
   arduboy.begin();
   arduboy.clear();
+
+  tunes.initChannel(PIN_SPEAKER_1);
+  tunes.initChannel(PIN_SPEAKER_2);
+
 }
 
 void loop()
 {
   if (!(arduboy.nextFrame()))
     return;
- 
+
   arduboy.clear();
 
- g_lasttime = millis();
+  g_lasttime = millis();
 
   while ((arduboy.pressed(A_BUTTON) == false) || (arduboy.pressed(B_BUTTON) == false))
   {
     if (!(arduboy.nextFrame()))
       continue;
-  arduboy.clear();
+    arduboy.clear();
 
     long curtime = millis(); //現在の時刻を記録
     g_frametime = (float)(curtime - g_lasttime) / 1000.0f;
@@ -112,6 +116,10 @@ void loop()
 void DrawGameTitle()
 {
 
+if(!tunes.playing()){
+tunes.playScore(OP_BGM);
+}
+
   arduboy.drawBitmap(TLE_X, TLE_Y, op_title, 65, 23, 1);
 
   tinyfont.setCursor(TLE_X, TLE_Y + 31);
@@ -119,25 +127,25 @@ void DrawGameTitle()
 
   if (arduboy.pressed(B_BUTTON))
   {
-  switch(g_soundstate){
+    switch (g_soundstate)
+    {
     case SOUND_OFF:
-    g_soundstate = SOUND_ON;
+      g_soundstate = SOUND_ON;
       break;
     case SOUND_ON:
-    g_soundstate = SOUND_OFF;
-    //arduboy.audio.off;
-    break;
+      g_soundstate = SOUND_OFF;
+      //arduboy.audio.off;
+      break;
     }
-  delay(200);
+    delay(200);
   }
-  
+
   tinyfont.setCursor(TLE_X, TLE_Y + 37);
   tinyfont.print("B:SOUND ");
 
   if (g_soundstate == SOUND_ON)
   {
     tinyfont.print("ON");
-    
   }
   else
   {
@@ -176,9 +184,6 @@ void DrawGameMain()
   arduboy.print(g_frametime);
   arduboy.print(" : ");
   arduboy.print(mv);
-
-
-
 }
 
 //ゲームクリア画面描画
